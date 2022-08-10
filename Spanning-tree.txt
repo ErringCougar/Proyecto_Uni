@@ -1,0 +1,77 @@
+enable) sh spanning-tree
+Para saber que el switch es raiz, debe concidir el mac address
+
+Para cambiar un switch a raiz
+config global) spanning-tree vlan 1 root primary
+
+Otra manera de cambiarlo a raiz
+config global) Spanning-tree vlan 1 priority 4096
+
+para cambiar el modo de spanning-tree a rapid
+en los tres switch
+config global) spanning-tree mode rapid
+
+Colocar spanning-tree en los switch que van en las pcs
+En cada switch
+int f0/1
+	|__spanning-tree portfast
+
+configurar el router inalambrico
+Wireless-->SSID-->UPSIN
+Wilreless Security-->WPA2 Personal
+			|_contraseña-->cisco1234
+--------------------
+Ether Channel
+// Comandos //
+S1, S2, S1,
+---
+S1:
+Conf t
+Host S1
+int range f0/21-22
+channel-p lacp
+channel-group 1 mode active
+
+int range f0/23-24
+channel-p lacp
+channel-group 2 mode active
+---
+S2:
+Conf t
+Host S2
+int range f0/23-24
+channel-p lacp
+channel-group 2 mode passive
+
+int range f0/21-22
+channel-p lacp
+channel-g 3 mode passive
+---
+S3:
+Conf t
+Hostname S3
+int range f0/21-22
+channel-p lacp
+channel-g 1 mode passive
+
+int range f0/23-24
+channel-p lacp
+channel-g 2 mode active
+---
+S1:
+conf t
+int port 1
+
+-> sw mo trunk
+int por 2
+-> sw mo trunk
+
+S2:
+conf t
+int por 2 y 3
+-> sw mo trunk
+
+S3:
+conf t
+int port 1 y 3
+-> sw mo trunk
